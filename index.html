@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>ניהול משחקיית שפרה ופועה</title>
+<link rel="stylesheet" href="assets/style.css" />
+</head>
+<body>
+
+  <!-- מסך התחברות -->
+  <div id="loginView" class="wrap narrow">
+    <div class="top-header">
+      <div class="brand">
+        <img src="assets/logo.png" alt="לוגו שפרה ופועה" />
+        <h1>ניהול המשחקייה</h1>
+      </div>
+    </div>
+    <form id="loginForm" class="card">
+      <h2>התחברות מנהלת</h2>
+      <div class="field">
+        <label for="loginEmail">אימייל</label>
+        <input type="email" id="loginEmail" required autocomplete="username" />
+      </div>
+      <div class="field">
+        <label for="loginPassword">סיסמה</label>
+        <input type="password" id="loginPassword" required autocomplete="current-password" />
+      </div>
+      <button type="submit" class="btn">התחברות</button>
+      <div class="status-msg" id="loginStatus"></div>
+    </form>
+  </div>
+
+  <!-- מסך האפליקציה -->
+  <div id="appView" class="wrap hidden">
+    <div class="top-header">
+      <div class="brand">
+        <img src="assets/logo.png" alt="לוגו שפרה ופועה" />
+        <h1>ניהול המשחקייה</h1>
+      </div>
+      <button type="button" class="btn secondary" id="logoutBtn">התנתקות</button>
+    </div>
+
+    <nav class="tabs">
+      <button type="button" data-tab="journal" class="active">יומן ושיבוץ</button>
+      <button type="button" data-tab="parents">ילדים והורים</button>
+      <button type="button" data-tab="madrichot">מדריכות</button>
+    </nav>
+
+    <!-- יומן + שיבוץ -->
+    <section data-view="journal">
+      <div class="card">
+        <div class="field">
+          <label for="journalDate">תאריך</label>
+          <input type="date" id="journalDate" />
+        </div>
+        <h2 id="journalDateLabel"></h2>
+      </div>
+
+      <div class="card">
+        <h2>מי מגיע היום</h2>
+        <div id="journalList"></div>
+      </div>
+
+      <div class="card">
+        <h2>שיבוץ מדריכות</h2>
+        <p class="muted">סמני את המדריכות שמתנדבות בתאריך הזה.</p>
+        <div id="madrichotChecklist"></div>
+      </div>
+
+      <div class="card">
+        <h2>שיתוף עם הצוות הבוגר</h2>
+        <p class="muted">אחרי שסיימת לעדכן את היומן והשיבוץ — צרי קישור ושלחי אותו.</p>
+        <button type="button" class="btn" id="generateLinkBtn">צור קישור לשיתוף</button>
+        <div class="link-box hidden" id="linkBox">
+          <input type="text" id="linkInput" readonly />
+          <button type="button" class="btn secondary" id="copyLinkBtn">העתקה</button>
+        </div>
+        <div class="status-msg" id="journalStatus"></div>
+      </div>
+    </section>
+
+    <!-- ילדים והורים -->
+    <section data-view="parents" class="hidden">
+      <div class="card">
+        <h2>הוספת ילד/ה</h2>
+        <p class="muted">בדרך כלל זה מתמלא אוטומטית מהטופס הראשוני — הטופס הזה בשביל הוספה ידנית או תיקון.</p>
+        <form id="childForm">
+          <div class="field">
+            <label for="childName">שם הילד/ה</label>
+            <input type="text" id="childName" required />
+          </div>
+          <div class="field">
+            <label for="motherName">שם האמא</label>
+            <input type="text" id="motherName" />
+          </div>
+          <div class="field">
+            <label for="motherPhone">טלפון האמא</label>
+            <input type="tel" id="motherPhone" />
+          </div>
+          <div class="field">
+            <label for="fatherName">שם האבא</label>
+            <input type="text" id="fatherName" />
+          </div>
+          <div class="field">
+            <label for="fatherPhone">טלפון האבא</label>
+            <input type="tel" id="fatherPhone" />
+          </div>
+          <div class="field">
+            <label for="childNotes">הערות (לא חובה)</label>
+            <input type="text" id="childNotes" />
+          </div>
+          <button type="submit" class="btn">הוספה</button>
+          <div class="status-msg" id="childrenStatus"></div>
+        </form>
+      </div>
+      <div class="card">
+        <h2>כל הילדים</h2>
+        <div id="childrenList"></div>
+      </div>
+    </section>
+
+    <!-- מדריכות -->
+    <section data-view="madrichot" class="hidden">
+      <div class="card">
+        <h2>הוספת מדריכה</h2>
+        <form id="madrichaForm">
+          <div class="field">
+            <label for="madrichaName">שם מלא</label>
+            <input type="text" id="madrichaName" required />
+          </div>
+          <div class="field">
+            <label for="madrichaPhone">טלפון</label>
+            <input type="tel" id="madrichaPhone" required />
+          </div>
+          <button type="submit" class="btn">הוספה</button>
+          <div class="status-msg" id="madrichotStatus"></div>
+        </form>
+      </div>
+      <div class="card">
+        <h2>כל המדריכות</h2>
+        <div id="madrichotList"></div>
+      </div>
+    </section>
+
+    <footer class="foot">ארגון שפרה ופועה — משחקייה</footer>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script src="assets/supabase-client.js"></script>
+  <script src="assets/admin.js"></script>
+</body>
+</html>

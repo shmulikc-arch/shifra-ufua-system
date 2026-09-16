@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>לוח היום — משחקיית שפרה ופועה</title>
+<link rel="stylesheet" href="assets/style.css" />
+</head>
+<body>
+
+  <div class="wrap narrow">
+    <div class="top-header">
+      <div class="brand">
+        <img src="assets/logo.png" alt="לוגו שפרה ופועה" />
+        <div>
+          <h1>לוח היום</h1>
+          <div class="muted" id="boardDate">טוען…</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>ילדים שמגיעים היום</h2>
+      <div id="parentsSection" class="empty">טוען…</div>
+    </div>
+
+    <div class="card">
+      <h2>מדריכות מתנדבות היום</h2>
+      <div id="madrichotSection" class="empty">טוען…</div>
+    </div>
+
+    <div id="boardMain"></div>
+
+    <footer class="foot">ארגון שפרה ופועה — משחקייה</footer>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script src="assets/supabase-client.js"></script>
+  <script src="assets/board.js"></script>
+</body>
+</html>
