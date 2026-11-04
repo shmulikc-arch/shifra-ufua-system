@@ -137,7 +137,7 @@
 
     const { data: regs, error: regErr } = await supabaseClient
       .from('daily_registrations')
-      .select('id, child_name, pickup_info, notes, child:children(child_name, mother_name, mother_phone, father_name, father_phone)')
+      .select('id, child_name, pickup_info, allergy_status, allergy_details, photo_consent, notes, child:children(child_name, mother_name, mother_phone, father_name, father_phone)')
       .eq('reg_date', selectedDate)
       .order('created_at', { ascending: true });
 
@@ -176,10 +176,15 @@
               '</a>'
             );
           }
+          const allergic = hasAllergy(r.allergy_status);
           return (
             '<li class="row"><div class="info">' +
             '<strong>' + childName + '</strong>' +
+            (allergic
+              ? '<span class="badge" style="color:#C0554A;background:#FBEAEF;">⚠ אלרגיה: ' + esc(r.allergy_details || r.allergy_status) + '</span>'
+              : '') +
             (r.pickup_info ? '<span class="sub">אוסף/ת: ' + esc(r.pickup_info) + '</span>' : '') +
+            (r.photo_consent ? '<span class="sub">אישור צילום: ' + esc(r.photo_consent) + '</span>' : '') +
             (!r.child ? '<span class="sub">לא נמצאה התאמה ברשימת הילדים</span>' : '') +
             (r.notes ? '<span class="sub">' + esc(r.notes) + '</span>' : '') +
             '</div>' +
@@ -355,7 +360,7 @@
   async function loadMadrichotTab() {
     const { data, error } = await supabaseClient
       .from('madrichot')
-      .select('id, full_name, phone, active')
+      .select('id, full_name, phone, age, hebrew_birth_date, active')
       .order('full_name', { ascending: true });
 
     if (error) {
@@ -369,17 +374,22 @@
     els.madrichotList.innerHTML =
       '<ul class="list">' +
       data
-        .map(
-          (m) =>
+        .map((m) => {
+          const details = [];
+          if (m.age) details.push('גיל ' + esc(m.age));
+          if (m.hebrew_birth_date) details.push('תאריך לידה עברי: ' + esc(m.hebrew_birth_date));
+          return (
             '<li class="row" data-id="' + m.id + '"><div class="info">' +
             '<strong>' + esc(m.full_name) + '</strong>' +
             '<span class="badge ' + (m.active ? 'on' : '') + '">' + (m.active ? 'פעילה' : 'לא פעילה') + '</span>' +
+            (details.length ? '<span class="sub">' + details.join(' · ') + '</span>' : '') +
             '</div>' +
             '<a class="call" href="' + esc(telHref(m.phone)) + '">' + esc(m.phone) + '</a>' +
             '<button type="button" class="btn secondary toggle-active">' + (m.active ? 'השבתה' : 'הפעלה') + '</button>' +
             '<button type="button" class="btn danger remove-madricha">הסרה</button>' +
             '</li>'
-        )
+          );
+        })
         .join('') +
       '</ul>';
 
@@ -447,6 +457,14 @@
 
   function telHref(phone) {
     return 'tel:' + String(phone).replace(/[^0-9+]/g, '');
+  }
+
+  // הטופס היומי מחזיר טקסט חופשי לשאלת האלרגיה; האפשרות השלילית הידועה
+  // מכילה את המילה "אין" (למשל "אין לבני/לבתי אלרגיה/רגישות"). כל ערך
+  // אחר נחשב כאזהרת אלרגיה שצריך להציג בבולטות.
+  function hasAllergy(status) {
+    if (!status) return false;
+    return !String(status).includes('אין');
   }
 
   function todayIso() {
