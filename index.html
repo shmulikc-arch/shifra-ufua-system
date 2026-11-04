@@ -123,6 +123,15 @@
     <!-- מדריכות -->
     <section data-view="madrichot" class="hidden">
       <div class="card">
+        <h2>קישור לטופס הרשמה</h2>
+        <p class="muted">שלחי את הקישור הזה למי שרוצה להצטרף כמדריכה — היא תירשם בעצמה.</p>
+        <div class="link-box">
+          <input type="text" id="signupLinkInput" readonly />
+          <button type="button" class="btn secondary" id="copySignupLinkBtn">העתקה</button>
+        </div>
+        <div class="status-msg" id="signupLinkStatus"></div>
+      </div>
+      <div class="card">
         <h2>הוספת מדריכה</h2>
         <form id="madrichaForm">
           <div class="field">
