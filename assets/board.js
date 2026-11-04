@@ -56,13 +56,17 @@
             );
           }
           const allergic = hasAllergy(c.allergy_status);
+          const allergyLine = c.allergy_status
+            ? (allergic
+                ? '<span class="badge" style="color:#C0554A;background:#FBEAEF;">⚠ אלרגיה: ' + esc(c.allergy_details || c.allergy_status) + '</span>'
+                : '<span class="badge" style="color:#2E7D5B;background:#E8F5EE;">אין אלרגיה</span>')
+            : '';
           return (
             '<li class="row"><div class="info">' +
             '<strong>' + esc(c.child_name || 'ילד/ה') + '</strong>' +
-            (allergic
-              ? '<span class="badge" style="color:#C0554A;background:#FBEAEF;">⚠ אלרגיה: ' + esc(c.allergy_details || c.allergy_status) + '</span>'
-              : '') +
+            allergyLine +
             (c.pickup_info ? '<span class="sub">אוסף/ת: ' + esc(c.pickup_info) + '</span>' : '') +
+            (c.photo_consent ? '<span class="sub">אישור צילום: ' + esc(c.photo_consent) + '</span>' : '') +
             (c.notes ? '<span class="sub">' + esc(c.notes) + '</span>' : '') +
             '</div>' +
             '<div style="display:flex;flex-direction:column;gap:6px;align-items:flex-end;">' + (parents.join('') || '<span class="muted">אין פרטי הורה</span>') + '</div>' +
