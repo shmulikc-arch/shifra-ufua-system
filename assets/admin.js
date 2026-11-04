@@ -64,6 +64,10 @@
     els.madrichaName = document.getElementById('madrichaName');
     els.madrichaPhone = document.getElementById('madrichaPhone');
     els.madrichotStatus = document.getElementById('madrichotStatus');
+
+    els.signupLinkInput = document.getElementById('signupLinkInput');
+    els.copySignupLinkBtn = document.getElementById('copySignupLinkBtn');
+    els.signupLinkStatus = document.getElementById('signupLinkStatus');
   }
 
   function wireStaticEvents() {
@@ -83,6 +87,7 @@
 
     els.childForm.addEventListener('submit', onAddChild);
     els.madrichaForm.addEventListener('submit', onAddMadricha);
+    els.copySignupLinkBtn.addEventListener('click', onCopySignupLink);
   }
 
   // ---- auth -----------------------------------------------------------
@@ -119,6 +124,7 @@
     loadJournal();
     loadChildren();
     loadMadrichotTab();
+    els.signupLinkInput.value = new URL('madricha-signup.html', window.location.href).toString();
   }
 
   // ---- tabs -------------------------------------------------------------
@@ -271,6 +277,14 @@
     navigator.clipboard
       .writeText(els.linkInput.value)
       .then(() => setStatus(els.journalStatus, 'הקישור הועתק.', 'ok'))
+      .catch(() => {});
+  }
+
+  function onCopySignupLink() {
+    els.signupLinkInput.select();
+    navigator.clipboard
+      .writeText(els.signupLinkInput.value)
+      .then(() => setStatus(els.signupLinkStatus, 'הקישור הועתק.', 'ok'))
       .catch(() => {});
   }
 
