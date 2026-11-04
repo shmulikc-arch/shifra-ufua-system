@@ -55,9 +55,13 @@
               '</a>'
             );
           }
+          const allergic = hasAllergy(c.allergy_status);
           return (
             '<li class="row"><div class="info">' +
             '<strong>' + esc(c.child_name || 'ילד/ה') + '</strong>' +
+            (allergic
+              ? '<span class="badge" style="color:#C0554A;background:#FBEAEF;">⚠ אלרגיה: ' + esc(c.allergy_details || c.allergy_status) + '</span>'
+              : '') +
             (c.pickup_info ? '<span class="sub">אוסף/ת: ' + esc(c.pickup_info) + '</span>' : '') +
             (c.notes ? '<span class="sub">' + esc(c.notes) + '</span>' : '') +
             '</div>' +
@@ -96,6 +100,11 @@
 
   function telHref(phone) {
     return 'tel:' + String(phone).replace(/[^0-9+]/g, '');
+  }
+
+  function hasAllergy(status) {
+    if (!status) return false;
+    return !String(status).includes('אין');
   }
 
   function formatHebrewDate(iso) {
