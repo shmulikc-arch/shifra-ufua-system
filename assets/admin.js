@@ -183,12 +183,15 @@
             );
           }
           const allergic = hasAllergy(r.allergy_status);
+          const allergyLine = r.allergy_status
+            ? (allergic
+                ? '<span class="badge" style="color:#C0554A;background:#FBEAEF;">⚠ אלרגיה: ' + esc(r.allergy_details || r.allergy_status) + '</span>'
+                : '<span class="badge" style="color:#2E7D5B;background:#E8F5EE;">אין אלרגיה</span>')
+            : '';
           return (
             '<li class="row"><div class="info">' +
             '<strong>' + childName + '</strong>' +
-            (allergic
-              ? '<span class="badge" style="color:#C0554A;background:#FBEAEF;">⚠ אלרגיה: ' + esc(r.allergy_details || r.allergy_status) + '</span>'
-              : '') +
+            allergyLine +
             (r.pickup_info ? '<span class="sub">אוסף/ת: ' + esc(r.pickup_info) + '</span>' : '') +
             (r.photo_consent ? '<span class="sub">אישור צילום: ' + esc(r.photo_consent) + '</span>' : '') +
             (!r.child ? '<span class="sub">לא נמצאה התאמה ברשימת הילדים</span>' : '') +
